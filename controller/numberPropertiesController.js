@@ -1,13 +1,15 @@
-import { response } from "express"
 import { BadRequestError, InternalServerError } from "../middleware/errorHandler.js"
 import { isarmstrong, isperfect, isPrime, issum } from "../utils/numberValidator.js"
 import axios from 'axios'
 
 const number = async (req, res, next) => {
     try{
-        const number = parseInt(req.query.number)
-        if (isNaN(number)) {
-            return next(new BadRequestError ('Invalid number input',{number: 'alphabet', error: true}))
+        const number = req.query.number
+        
+        const numberValue = Number(number);
+
+        if (!number || isNaN(numberValue)) {
+            return next(new BadRequestError ('Invalid number input',{error: true, "number": number || null}))
         }
 
         const prime = isPrime(number);
@@ -23,7 +25,7 @@ const number = async (req, res, next) => {
 
         let funFact = '';
         try {
-            const response = await axios.get(`http://numbersapi.com/${number}/math?json`);
+            const response = await axios.get(`http://numbersapi.com/${numberValue}/math?json`);
             funFact = response.data.text;
             }catch (error) {
                 funFact = 'Could not fetch fun fact at this time.';
@@ -39,7 +41,8 @@ const number = async (req, res, next) => {
         })
 
     }catch(error){
-        return next(new InternalServerError ())
+        console.error(error.message)
+        next(error);
     }
 }
 
