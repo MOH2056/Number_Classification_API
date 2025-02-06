@@ -18,16 +18,16 @@ const number = async (req, res, next) => {
             Promise.resolve(issum(numberValue)),
         ]);
 
-        const evenodd = number % 2 === 0 ? 'even' : 'odd';
+        const evenodd = numberValue % 2 === 0 ? "even" : "odd";
+        const properties = [evenodd];
 
-        let properties = [];
-        if (armstrong) properties.push('armstrong');
-        properties.push(evenodd);
+        if (armstrong) properties.push("armstrong");
+
 
         let funFact = '';
         try {
             const response = await axios.get(`http://numbersapi.com/${numberValue}/math?json`);
-            funFact = response.data.text;
+            funFact = response.data?.text || "No fun fact available."
             }catch (error) {
                 funFact = 'Could not fetch fun fact at this time.';
             }   
