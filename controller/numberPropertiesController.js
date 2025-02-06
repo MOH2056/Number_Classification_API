@@ -41,7 +41,7 @@ const number = async (req, res, next) => {
             is_perfect: perfect,
             properties,
             digit_sum: digitsum,
-            fun_Fact: funFact
+            fun_fact: funFact
         })
 
     }catch(error){
