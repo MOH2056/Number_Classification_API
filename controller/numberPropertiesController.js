@@ -1,21 +1,22 @@
 import { BadRequestError, InternalServerError } from "../middleware/errorHandler.js"
 import { isarmstrong, isperfect, isPrime, issum } from "../utils/numberValidator.js"
-import axios from 'axios'
+import axios from "axios"
 
 const number = async (req, res, next) => {
     try{
-        const number = req.query.number
-        
+        const {number} = req.query
         const numberValue = Number(number);
 
         if (!number || isNaN(numberValue)) {
-            return next(new BadRequestError ('Invalid number input',{error: true, "number": number || null}))
+            return next(new BadRequestError ('Invalid number input',{error: true, "number": number}))
         }
 
-        const prime = isPrime(number);
-        const perfect = isperfect(number)
-        const armstrong = isarmstrong(number)
-        const digitsum = issum(number)
+        const [prime, perfect, armstrong, digitsum] = await Promise.all([
+            Promise.resolve(isPrime(numberValue)),
+            Promise.resolve(isperfect(numberValue)),
+            Promise.resolve(isarmstrong(numberValue)),
+            Promise.resolve(issum(numberValue)),
+        ]);
 
         const evenodd = number % 2 === 0 ? 'even' : 'odd';
 
@@ -29,7 +30,8 @@ const number = async (req, res, next) => {
             funFact = response.data.text;
             }catch (error) {
                 funFact = 'Could not fetch fun fact at this time.';
-            }
+            }   
+
 
         return res.json({
             number,
@@ -45,5 +47,6 @@ const number = async (req, res, next) => {
         next(error);
     }
 }
+
 
 export default number

@@ -1,3 +1,5 @@
+import axios  from "axios";
+
 const isPrime = (numbertobechecked) => {
     if (numbertobechecked <= 1) return false;
 
@@ -9,11 +11,15 @@ const isPrime = (numbertobechecked) => {
 }
 
 const isperfect = (num) => {
-    let sum = 0;
+    if (num < 2) return false;
 
-    for (let n = 0; n < num; n++) {
-        if(num % n === 0){
-            sum += n;
+    let sum = 1;
+
+    for (let i = 2; i <= Math.sqrt(num); i++) {
+        if (num % i === 0) {
+            sum += i;
+            let pairDivisor = num / i;
+            if (pairDivisor !== i) sum += pairDivisor;
         }
     }
     return sum === num;
