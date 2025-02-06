@@ -26,24 +26,26 @@ const isperfect = (num) => {
 };
 
 const isarmstrong = (numberchecked) => {
-    const digits = numberchecked.toString().split('');
+    const absoluteNumber = Math.abs(numberchecked);
+    const digits = absoluteNumber.toString().split('');
     const power = digits.length;
     const sum = digits.reduce((acc, digit) => acc + Math.pow(parseInt(digit), power), 0);
-    return sum === numberchecked;
-}
+    return sum === absoluteNumber;
+};
+
 
 const issum = (numbertobechecked) => {
-    const absoluteNumber = Math.abs(numbertobechecked); // Ignore the negative sign
+    const absoluteNumber = Math.abs(numbertobechecked);
     return absoluteNumber.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
 }
 
 const fetchFunFact = async (num) => {
     try {
         const response = await axios.get(`http://numbersapi.com/${num}/math?json`);
-        return response.data.text;  // Return the fun fact
+        return response.data.text; 
     } catch (error) {
         console.error("Error fetching fun fact:", error);
-        return "Could not fetch fun fact at this time.";  // Fallback message in case of failure
+        return "Could not fetch fun fact at this time.";
     }
 };
 
