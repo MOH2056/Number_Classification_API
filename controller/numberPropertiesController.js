@@ -18,10 +18,12 @@ const number = async (req, res, next) => {
             Promise.resolve(issum(numberValue)),
         ]);
 
+        const properties = [];
+        if (armstrong) {
+            properties.push("armstrong");
+        }
         const evenodd = numberValue % 2 === 0 ? "even" : "odd";
-        const properties = [evenodd];
-
-        if (armstrong) properties.push("armstrong");
+        properties.push(evenodd);
 
 
         let funFact = '';
