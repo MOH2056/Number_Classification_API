@@ -37,4 +37,15 @@ const issum = (numbertobechecked) => {
 
 }
 
-export {isPrime, isperfect, isarmstrong, issum}
+const fetchFunFact = async (num) => {
+    try {
+        const response = await axios.get(`http://numbersapi.com/${num}/math?json`);
+        return response.data.text;  // Return the fun fact
+    } catch (error) {
+        console.error("Error fetching fun fact:", error);
+        return "Could not fetch fun fact at this time.";  // Fallback message in case of failure
+    }
+};
+
+
+export {isPrime, isperfect, isarmstrong, issum, fetchFunFact}

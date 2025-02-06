@@ -1,6 +1,5 @@
-import { BadRequestError, InternalServerError } from "../middleware/errorHandler.js"
-import { isarmstrong, isperfect, isPrime, issum } from "../utils/numberValidator.js"
-import axios from "axios"
+import { BadRequestError} from "../middleware/errorHandler.js"
+import { isarmstrong, isperfect, isPrime, issum, fetchFunFact } from "../utils/numberValidator.js"
 
 const number = async (req, res, next) => {
     try{
@@ -11,29 +10,22 @@ const number = async (req, res, next) => {
             return next(new BadRequestError ('Invalid number input',{error: true, "number": number}))
         }
 
-        const [prime, perfect, armstrong, digitsum] = await Promise.all([
+         if (numberValue < 0) {
+             return next(new BadRequestError('Negative numbers are not supported', { error: true, number }));
+         }
+
+        const [prime, perfect, armstrong, digitsum, FunFact] = await Promise.all([
             Promise.resolve(isPrime(numberValue)),
             Promise.resolve(isperfect(numberValue)),
             Promise.resolve(isarmstrong(numberValue)),
             Promise.resolve(issum(numberValue)),
+            Promise.resolve(fetchFunFact(numberValue)),
+            
         ]);
 
         const properties = [];
-        if (armstrong) {
-            properties.push("armstrong");
-        }
-        const evenodd = numberValue % 2 === 0 ? "even" : "odd";
-        properties.push(evenodd);
-
-
-        let funFact = '';
-        try {
-            const response = await axios.get(`http://numbersapi.com/${numberValue}/math?json`);
-            funFact = response.data?.text || "No fun fact available."
-            }catch (error) {
-                funFact = 'Could not fetch fun fact at this time.';
-            }   
-
+        if (armstrong) properties.push("armstrong");
+        properties.push(numberValue % 2 === 1 ? "odd" : "even");
 
         return res.json({
             number,
@@ -41,7 +33,7 @@ const number = async (req, res, next) => {
             is_perfect: perfect,
             properties,
             digit_sum: digitsum,
-            fun_fact: funFact
+            fun_fact: FunFact
         })
 
     }catch(error){
