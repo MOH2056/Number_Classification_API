@@ -10,10 +10,6 @@ const number = async (req, res, next) => {
             return next(new BadRequestError ('Invalid number input',{error: true, "number": number}))
         }
 
-         if (numberValue < 0) {
-             return next(new BadRequestError('Negative numbers are not supported', { error: true, number }));
-         }
-
         const [prime, perfect, armstrong, digitsum, FunFact] = await Promise.all([
             Promise.resolve(isPrime(numberValue)),
             Promise.resolve(isperfect(numberValue)),
