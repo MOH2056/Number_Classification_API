@@ -33,8 +33,8 @@ const isarmstrong = (numberchecked) => {
 }
 
 const issum = (numbertobechecked) => {
-    return numbertobechecked.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
-
+    const absoluteNumber = Math.abs(numbertobechecked); // Ignore the negative sign
+    return absoluteNumber.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
 }
 
 const fetchFunFact = async (num) => {

@@ -21,7 +21,7 @@ const number = async (req, res, next) => {
 
         const properties = [];
         if (armstrong) properties.push("armstrong");
-        properties.push(numberValue % 2 === 1 ? "odd" : "even");
+        properties.push(Math.abs(numberValue) % 2 === 1 ? "odd" : "even");
 
         return res.json({
             number,
